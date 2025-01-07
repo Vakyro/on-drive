@@ -1,31 +1,26 @@
-'use server'
-
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { createClient } from '../../../utils/supabase/server'
+'use server';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { createClient } from '../../../utils/supabase/server';
 
 export async function login(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  const username = formData.get('username') as string;
+  const password = formData.get('password') as string;
 
-  const username = formData.get('username') as string
-  const newEmail = username + '@ondrive.com'
-
-  const data = {
-    email: newEmail,
-    password: formData.get('password') as string,
+  if (!username || !password) {
+    return { error: 'Username y contraseña son obligatorios.' };
   }
-  
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const email = `${username}@ondrive.com`;
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    console.error('Error logging in:', error.message)
-    return
+    return { error: 'Inicio de sesión fallido. Verifica tus credenciales.' };
   }
 
-  revalidatePath('/')
-  redirect('/dashboard')
+  revalidatePath('/');
+  redirect('/dashboard');
 }

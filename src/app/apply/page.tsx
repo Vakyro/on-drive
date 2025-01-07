@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import { createClient } from "../../../utils/supabase/client";
 import { Label } from "@/components/ui/label";
+import { toast } from 'sonner'
 
 export default function ApplyPage() {
   const [name, setName] = useState('');
@@ -59,7 +60,8 @@ export default function ApplyPage() {
 
     if (error) {
       console.error("Upload error:", error);
-      setUploadStatus("Failed to upload the file.");
+      setUploadStatus("");
+      toast.error('Failed to upload the file.')
       return;
     }
 
@@ -77,11 +79,13 @@ export default function ApplyPage() {
 
     if (dbError) {
       console.error("Database insertion error:", dbError);
-      setUploadStatus("Failed to save application data.");
+      toast.error('Failed to save application data.')
+      setUploadStatus("");
       return;
     }
 
-    setUploadStatus("Application submitted successfully!");
+    toast.success('Application submitted successfully!')
+    setUploadStatus("");
     // Limpiar el formulario después de enviar
     setName('');
     setEmail('');

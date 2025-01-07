@@ -21,7 +21,7 @@ export default async function Home() {
       <main className="flex flex-col items-center justify-center flex-grow w-full text-center">
         <Logo size={80} />
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mt-4 mb-2">
-          Welcome to the Truck Driver App
+          Welcome to OnDrive
         </h1>
         <p className="mt-3 text-xl sm:text-2xl mb-6">
           Log in to access your forms and reports

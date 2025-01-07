@@ -3,7 +3,7 @@ import { Toaster } from 'sonner' // Importa el componente Toaster
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Home, Truck, PenToolIcon as Tool, AlertTriangle, User, MessageCircle } from 'lucide-react'
+import { Home, Truck, PenToolIcon as Tool, AlertTriangle, User, MessageCircle, Droplets } from 'lucide-react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -158,6 +158,10 @@ function DashboardLayoutContent({
             <Link href="/dashboard/maintenance" className={`flex flex-col items-center ${isActive('/dashboard/maintenance') ? 'text-blue-500' : 'text-gray-500'}`}>
               <Tool size={24} />
               <span className="text-xs mt-1">Maintenance</span>
+            </Link>
+            <Link href="/dashboard/lubrication" className={`flex flex-col items-center ${isActive('/dashboard/lubrication') ? 'text-blue-500' : 'text-gray-500'}`}>
+              <Droplets size={24} />
+              <span className="text-xs mt-1">Lubrication</span>
             </Link>
             <Link href="/dashboard/issues" className={`flex flex-col items-center ${isActive('/dashboard/issues') ? 'text-blue-500' : 'text-gray-500'}`}>
               <AlertTriangle size={24} />
