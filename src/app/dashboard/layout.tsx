@@ -195,12 +195,12 @@ function DashboardLayoutContent({
                 <div
                   key={msg.id}
                   // @ts-ignore
-                  className={`flex ${msg.senderid === 15 ? 'justify-start' : 'justify-end'} my-2`}
+                  className={`flex ${msg.senderid === 1 ? 'justify-start' : 'justify-end'} my-2`}
                 >
                   <div
                     className={`inline-block px-4 py-2 rounded-lg max-w-xs ${
                       // @ts-ignore
-                      msg.senderid === 15
+                      msg.senderid === 1
                         ? 'bg-gray-100 text-gray-800 shadow'
                         : 'bg-blue-500 text-white shadow-md'
                     }`}

@@ -18,11 +18,12 @@ export default function StartTripPage() {
   const [tripData, setTripData] = useState({
     destination: '',
     truckplate: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0], // Fecha de hoy en formato YYYY-MM-DD
     chargeNumber: '',
     latitude: '',
     longitude: ''
   });
+  
 
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[] | null>(null);
@@ -61,7 +62,7 @@ export default function StartTripPage() {
     
     // Verificamos si hay mantenimiento para este usuario dentro de la última semana
     const { data, error } = await supabase
-      .from('lubricationinspection')
+      .from('vehicleinspection')
       .select()
       .eq('userid', userId)
       .gt('inspectiondate', oneWeekAgo.toISOString()); // Compara la fecha de mantenimiento con hace una semana
@@ -172,7 +173,7 @@ export default function StartTripPage() {
               name="date"
               value={tripData.date}
               onChange={(e) => handleChange('date', e.target.value)}
-              required
+              readOnly // Esto hace que el campo sea solo lectura
             />
           </div>
           <div>
