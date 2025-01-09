@@ -64,7 +64,7 @@ export default function VehicleInspectionForm() {
       .from('vehicleinspection')
       .insert({
         ...formData,
-        truckplate: parseInt(formData.truckplate),
+        truckplate: formData.truckplate,
         odometerreading: parseInt(formData.odometerreading),
         userid: users?.find(u => u.email === user?.email)?.id,
       })
