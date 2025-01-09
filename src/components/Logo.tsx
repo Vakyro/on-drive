@@ -6,13 +6,12 @@ interface LogoProps {
 
 export function Logo({ size = 40 }: LogoProps) {
   return (
-    <div className="relative" style={{ width: size, height: size }}>
+    <div className="relative rounded-full border-2 border-black p-2" style={{ width: size, height: size }}>
       <Image
         src="/logo.svg"
         alt="TruckApp Logo"
         width={size}
         height={size}
-        className="rounded-full bg-black p-2"
       />
     </div>
   )
