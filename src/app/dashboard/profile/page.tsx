@@ -32,49 +32,29 @@ export default async function ProfilePage() {
           <Logo size={80} />
         </div>
         <CardHeader>
-          <CardTitle>Perfil del Usuario</CardTitle>
+          <CardTitle>User Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Nombre</label>
+              <label className="block text-sm font-medium text-gray-700">Name</label>
               <Input value={`${profile.firstname} ${profile.lastname}`} readOnly />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Rol</label>
+              <label className="block text-sm font-medium text-gray-700">Role</label>
               <Input value={profile.rol} readOnly />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Teléfono</label>
+              <label className="block text-sm font-medium text-gray-700">Phone</label>
               <Input value={profile.phonenumber} readOnly />
             </div>
           </div>
         </CardContent>
-        {/* 
-        <CardHeader>
-          <CardTitle>Language</CardTitle>
-        </CardHeader>
-        */}
         <CardContent>
           <div className="space-y-4">
-            {/*
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Select Language</label>
-              <Select defaultValue="es">
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona un idioma" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Spanish</SelectItem>
-                  <SelectItem value="pt">Portugués</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            */}
             <form action={logout}>
               <Button type="submit" variant="destructive" className="w-full">
-                Cerrar Sesión
+                Log Out
               </Button>
             </form>
           </div>

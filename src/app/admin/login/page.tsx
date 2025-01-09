@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/Logo";
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function AdminLoginPage() {
     const [error, setError] = useState<string | null>(null);
@@ -59,6 +60,11 @@ export default function AdminLoginPage() {
               </Button>
             </div>
           </form>
+          <div className="mt-4 text-right">
+            <Link href="/login" className="text-sm text-blue-500 hover:underline">
+              User Login
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

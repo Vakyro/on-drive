@@ -64,7 +64,11 @@ export default function EndTripPage() {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment", // Esto especifica la cámara trasera
+        },
+      })
       if (videoRef.current) {
         videoRef.current.srcObject = stream
       }
@@ -146,7 +150,7 @@ export default function EndTripPage() {
       console.error("Error updating delivery record:", updateError)
     } else {
       console.log("Delivery record updated successfully:", updateData)
-      toast.success('¡Viaje finalizado exitosamente!')
+      toast.success('Trip successfully completed!')
       router.push('/dashboard')
     }
   }
