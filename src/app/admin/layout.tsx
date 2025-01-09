@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Menu, X, Users, Truck, AlertTriangle, MessageCircle, LogOut } from 'lucide-react'
+import { Menu, X, Users, Truck, AlertTriangle, MessageCircle, Wrench, Droplets, Signature, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Logo } from "@/components/Logo"
@@ -29,9 +29,9 @@ export default function AdminLayout({
     { href: '/admin/users', label: 'Users', icon: Users },
     { href: '/admin/deliveries', label: 'Deliveries', icon: Truck },
     { href: '/admin/issues', label: 'Issues', icon: AlertTriangle },
-    { href: '/admin/maintenance', label: 'Maintenance', icon: MessageCircle },
-    { href: '/admin/lubrication', label: 'lubricaition', icon: MessageCircle },
-    { href: '/admin/applies', label: 'Applies', icon: MessageCircle },
+    { href: '/admin/maintenance', label: 'Maintenance', icon: Wrench },
+    { href: '/admin/lubrication', label: 'lubricaition', icon: Droplets },
+    { href: '/admin/applies', label: 'Applies', icon: Signature },
     { href: '/admin/chats', label: 'Chats', icon: MessageCircle },
   ]
 

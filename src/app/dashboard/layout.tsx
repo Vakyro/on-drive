@@ -3,7 +3,7 @@ import { Toaster } from 'sonner' // Importa el componente Toaster
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Home, Truck, PenToolIcon as Tool, AlertTriangle, User, MessageCircle, Droplets } from 'lucide-react'
+import { Home, Truck, Wrench as Tool, AlertTriangle, User, MessageCircle, Droplets } from 'lucide-react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"

@@ -30,24 +30,21 @@ export default function RepairReportsPage() {
   }, []);
 
   const fetchRepairReports = async () => {
-    const { data, error } = await supabase
-      .from('repairreport')
-      .select('*');
+    const { data, error } = await supabase.from('repairreport').select('*');
     if (data) setRepairReports(data);
     if (error) console.error('Error fetching repair reports:', error);
   };
 
   const deleteRepairReport = async (id: number) => {
     try {
-      const { error } = await supabase
-        .from('repairreport')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-
-      setRepairReports(repairReports.filter((report) => report.id !== id));
+      const { error } = await supabase.from('repairreport').delete().eq('id', id);
+      if (!error) {
+        setRepairReports(repairReports.filter((report) => report.id !== id));
+      } else {
+        console.error('Error deleting repair report:', error);
+      }
     } catch (error) {
-      console.error('Error deleting repair report:', error);
+      console.error('Unexpected error deleting report:', error);
     }
   };
 
@@ -57,7 +54,8 @@ export default function RepairReportsPage() {
         <CardTitle>Repair Report Management</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] w-full rounded-md border">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -98,7 +96,31 @@ export default function RepairReportsPage() {
               ))}
             </TableBody>
           </Table>
-        </ScrollArea>
+        </div>
+
+        {/* Mobile View */}
+        <div className="md:hidden space-y-4">
+          {repairReports.map((report) => (
+            <div key={report.id} className="border rounded-md p-4 bg-gray-50 space-y-2">
+              <p><strong>Id:</strong> {report.id}</p>
+              <p><strong>Carrier Name:</strong> {report.carriername}</p>
+              <p><strong>Unit Number:</strong> {report.unitnumber}</p>
+              <p><strong>Year:</strong> {report.year}</p>
+              <p><strong>Make:</strong> {report.make}</p>
+              <p><strong>Model:</strong> {report.model}</p>
+              <p><strong>License:</strong> {report.license}</p>
+              <p><strong>Mileage/Hour:</strong> {report.mileageorhour}</p>
+              <p><strong>Repair Date:</strong> {report.repairdate}</p>
+              <p><strong>Description:</strong> {report.repairdescription}</p>
+              <p><strong>Truck Plate:</strong> {report.truckplate}</p>
+              <div className="flex space-x-2">
+                <Button variant="destructive" size="sm" onClick={() => deleteRepairReport(report.id)}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

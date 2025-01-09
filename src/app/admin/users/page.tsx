@@ -27,9 +27,7 @@ export default function UsersPage() {
   }, []);
 
   const fetchUsers = async () => {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*');
+    const { data, error } = await supabase.from('users').select('*');
     if (data) setUsers(data);
     if (error) console.error('Error fetching users:', error);
   };
@@ -40,25 +38,17 @@ export default function UsersPage() {
   };
 
   const deleteUser = async (id: string) => {
-    try {  
-      // Eliminar al usuario de la tabla `users`
-      const { error: userDeleteError } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', id);
-  
-      if (userDeleteError) {
-        console.error('Error deleting user from users table:', userDeleteError.message);
-      } else {
-        // Actualizar el estado para reflejar los cambios en la tabla
+    try {
+      const { error: userDeleteError } = await supabase.from('users').delete().eq('id', id);
+      if (!userDeleteError) {
         setUsers(users.filter((user) => user.id !== id));
+      } else {
+        console.error('Error deleting user:', userDeleteError.message);
       }
     } catch (error) {
       console.error('Unexpected error deleting user:', error);
     }
   };
-  
-  
 
   return (
     <Card>
@@ -71,21 +61,19 @@ export default function UsersPage() {
             {showAddForm ? 'Close Add User Form' : 'Add New User'}
           </Button>
 
-          {showAddForm && (
-            <AddUserForm onUserAdded={handleUserAdded} />
-          )}
+          {showAddForm && <AddUserForm onUserAdded={handleUserAdded} />}
 
-          <ScrollArea className="h-[400px] w-full rounded-md border">
-            <Table>
+          <div className="overflow-x-auto">
+            <Table className="hidden md:table">
               <TableHeader>
                 <TableRow>
                   <TableHead>Id</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Last Name</TableHead>
-                  <TableHead className="hidden md:table-cell">Rol</TableHead>
-                  <TableHead className="hidden md:table-cell">Phone Number</TableHead>
-                  <TableHead className="hidden md:table-cell">Username</TableHead>
-                  <TableHead className="hidden md:table-cell">Password</TableHead>
+                  <TableHead>Rol</TableHead>
+                  <TableHead>Phone Number</TableHead>
+                  <TableHead>Username</TableHead>
+                  <TableHead>Password</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -95,10 +83,10 @@ export default function UsersPage() {
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.firstname}</TableCell>
                     <TableCell>{user.lastname}</TableCell>
-                    <TableCell className="hidden md:table-cell">{user.rol}</TableCell>
-                    <TableCell className="hidden md:table-cell">{user.phonenumber}</TableCell>
-                    <TableCell className="hidden md:table-cell">{user.username}</TableCell>
-                    <TableCell className="hidden md:table-cell">{user.password}</TableCell>
+                    <TableCell>{user.rol}</TableCell>
+                    <TableCell>{user.phonenumber}</TableCell>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.password}</TableCell>
                     <TableCell>
                       <div className="flex space-x-2">
                         <Button variant="destructive" size="sm" onClick={() => deleteUser(user.id)}>
@@ -110,7 +98,34 @@ export default function UsersPage() {
                 ))}
               </TableBody>
             </Table>
-          </ScrollArea>
+
+            {/* Mobile View */}
+            <div className="md:hidden space-y-4">
+              {users.map((user) => (
+                <div
+                  key={user.id}
+                  className="border rounded-md p-4 space-y-2 bg-gray-50"
+                >
+                  <p><strong>Id:</strong> {user.id}</p>
+                  <p><strong>Name:</strong> {user.firstname}</p>
+                  <p><strong>Last Name:</strong> {user.lastname}</p>
+                  <p><strong>Rol:</strong> {user.rol}</p>
+                  <p><strong>Phone Number:</strong> {user.phonenumber}</p>
+                  <p><strong>Username:</strong> {user.username}</p>
+                  <p><strong>Password:</strong> {user.password}</p>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

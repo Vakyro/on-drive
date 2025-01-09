@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from '@/lib/supabase';
 
 interface VehicleInspection {
@@ -29,24 +28,21 @@ export default function VehicleInspectionsPage() {
   }, []);
 
   const fetchInspections = async () => {
-    const { data, error } = await supabase
-      .from('vehicleinspection')
-      .select('*');
+    const { data, error } = await supabase.from('vehicleinspection').select('*');
     if (data) setInspections(data);
     if (error) console.error('Error fetching vehicle inspections:', error);
   };
 
   const deleteInspection = async (id: number) => {
     try {
-      const { error } = await supabase
-        .from('vehicleinspection')
-        .delete()
-        .eq('id', id);
-      if (error) throw error;
-
-      setInspections(inspections.filter((inspection) => inspection.id !== id));
+      const { error } = await supabase.from('vehicleinspection').delete().eq('id', id);
+      if (!error) {
+        setInspections(inspections.filter((inspection) => inspection.id !== id));
+      } else {
+        console.error('Error deleting vehicle inspection:', error);
+      }
     } catch (error) {
-      console.error('Error deleting vehicle inspection:', error);
+      console.error('Unexpected error deleting inspection:', error);
     }
   };
 
@@ -56,7 +52,8 @@ export default function VehicleInspectionsPage() {
         <CardTitle>Vehicle Inspection Management</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] w-full rounded-md border">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -95,7 +92,30 @@ export default function VehicleInspectionsPage() {
               ))}
             </TableBody>
           </Table>
-        </ScrollArea>
+        </div>
+
+        {/* Mobile View */}
+        <div className="md:hidden space-y-4">
+          {inspections.map((inspection) => (
+            <div key={inspection.id} className="border rounded-md p-4 bg-gray-50 space-y-2">
+              <p><strong>Id:</strong> {inspection.id}</p>
+              <p><strong>Carrier:</strong> {inspection.carrier}</p>
+              <p><strong>Address:</strong> {inspection.address}</p>
+              <p><strong>Inspection Date:</strong> {inspection.inspectiondate}</p>
+              <p><strong>Inspection Time:</strong> {inspection.inspectiontime}</p>
+              <p><strong>Truck Plate:</strong> {inspection.truckplate}</p>
+              <p><strong>Odometer Reading:</strong> {inspection.odometerreading}</p>
+              <p><strong>Remarks:</strong> {inspection.remarks}</p>
+              <p><strong>Driver's Signature:</strong> {inspection.driversignature}</p>
+              <p><strong>Mechanic's Signature:</strong> {inspection.mechanicsignature}</p>
+              <div className="flex space-x-2">
+                <Button variant="destructive" size="sm" onClick={() => deleteInspection(inspection.id)}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
