@@ -55,7 +55,7 @@ const AddUserForm: React.FC<AddUserFormProps> = ({ onUserAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
       <Input name="firstname" placeholder="First Name" value={formData.firstname} onChange={handleInputChange} />
       <Input name="lastname" placeholder="Last Name" value={formData.lastname} onChange={handleInputChange} />
       <Select value={formData.rol} onValueChange={handleRoleChange}>

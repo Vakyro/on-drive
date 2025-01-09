@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Viewport } from "next"
 import { Toaster } from 'sonner'
+import { ViewTransitions } from 'next-view-transitions'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ViewTransitions>
       <html lang="en">
         <head>
           <link rel="apple-touch-icon" href="/icon.png"/>
@@ -43,5 +45,6 @@ export default function RootLayout({
           <Toaster  position="top-center" richColors />
         </body>
       </html>
+    </ViewTransitions>
   );
 }

@@ -1,6 +1,6 @@
 'use client'
 import { Toaster } from 'sonner' // Importa el componente Toaster
-import Link from 'next/link'
+import { Link } from 'next-view-transitions'
 import { useRouter, usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Home, Truck, Wrench as Tool, AlertTriangle, User, MessageCircle, Droplets } from 'lucide-react'
@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { redirect } from 'next/navigation'
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from "../../../utils/supabase/client"
+import { ViewTransitions } from 'next-view-transitions'
 
 function DashboardLayoutContent({
   children,
@@ -139,95 +140,97 @@ function DashboardLayoutContent({
   }, [messages])
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-16">
-      <main className="max-w-7xl mx-auto py-6 pb-24 sm:px-6 lg:px-8">
-        {children}
-      </main>
+    <ViewTransitions>
+      <div className="min-h-screen bg-gray-100 pb-16">
+        <main className="max-w-7xl mx-auto py-6 pb-24 sm:px-6 lg:px-8">
+          {children}
+        </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <Link href="/dashboard" className={`flex flex-col items-center ${isActive('/dashboard') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <Home size={24} />
-              <span className="text-xs mt-1">Dashboard</span>
-            </Link>
-            <Link href="/dashboard/start-trip" className={`flex flex-col items-center ${isActive('/dashboard/start-trip') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <Truck size={24} />
-              <span className="text-xs mt-1">Delivery</span>
-            </Link>
-            <Link href="/dashboard/maintenance" className={`flex flex-col items-center ${isActive('/dashboard/maintenance') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <Tool size={24} />
-              <span className="text-xs mt-1">Maintenance</span>
-            </Link>
-            <Link href="/dashboard/lubrication" className={`flex flex-col items-center ${isActive('/dashboard/lubrication') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <Droplets size={24} />
-              <span className="text-xs mt-1">Lubrication</span>
-            </Link>
-            <Link href="/dashboard/issues" className={`flex flex-col items-center ${isActive('/dashboard/issues') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <AlertTriangle size={24} />
-              <span className="text-xs mt-1">Issues</span>
-            </Link>
-            <Link href="/dashboard/profile" className={`flex flex-col items-center ${isActive('/dashboard/profile') ? 'text-blue-500' : 'text-gray-500'}`}>
-              <User size={24} />
-              <span className="text-xs mt-1">Profile</span>
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon"
-            className="fixed bottom-24 right-4 rounded-full shadow-lg"
-          >
-            <MessageCircle size={24} />
-          </Button>
-        </SheetTrigger>
-        <SheetContent className="flex flex-col">
-          <SheetHeader>
-            <SheetTitle>Chat with Admin</SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-col h-full">
-            <ScrollArea className="flex-grow">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  // @ts-ignore
-                  className={`flex ${msg.senderid === 1 ? 'justify-start' : 'justify-end'} my-2`}
-                >
-                  <div
-                    className={`inline-block px-4 py-2 rounded-lg max-w-xs ${
-                      // @ts-ignore
-                      msg.senderid === 1
-                        ? 'bg-gray-100 text-gray-800 shadow'
-                        : 'bg-blue-500 text-white shadow-md'
-                    }`}
-                  >
-                    {msg.message}
-                  </div>
-                </div>
-              ))}
-              <div ref={messagesEndRef}></div>
-            </ScrollArea>
-            <div className="flex gap-2 mt-4 mb-10">
-              <Input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Type your message..."
-              />
-              <Button onClick={handleSendMessage}>
-                Send
-              </Button>
+        <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
+          <div className="pb-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              <Link href="/dashboard" className={`flex flex-col items-center ${isActive('/dashboard') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <Home size={24} />
+                <span className="text-xs mt-1">Dashboard</span>
+              </Link>
+              <Link href="/dashboard/start-trip" className={`flex flex-col items-center ${isActive('/dashboard/start-trip') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <Truck size={24} />
+                <span className="text-xs mt-1">Delivery</span>
+              </Link>
+              <Link href="/dashboard/maintenance" className={`flex flex-col items-center ${isActive('/dashboard/maintenance') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <Tool size={24} />
+                <span className="text-xs mt-1">Maintenance</span>
+              </Link>
+              <Link href="/dashboard/lubrication" className={`flex flex-col items-center ${isActive('/dashboard/lubrication') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <Droplets size={24} />
+                <span className="text-xs mt-1">Lubrication</span>
+              </Link>
+              <Link href="/dashboard/issues" className={`flex flex-col items-center ${isActive('/dashboard/issues') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <AlertTriangle size={24} />
+                <span className="text-xs mt-1">Issues</span>
+              </Link>
+              <Link href="/dashboard/profile" className={`flex flex-col items-center ${isActive('/dashboard/profile') ? 'text-blue-500' : 'text-gray-500'}`}>
+                <User size={24} />
+                <span className="text-xs mt-1">Profile</span>
+              </Link>
             </div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </nav>
 
-      <Toaster  position="top-center" richColors />
-    </div>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+              <Button
+              variant="outline"
+              size="icon"
+              className="fixed bottom-24 right-4 rounded-full shadow-lg"
+              >
+              <MessageCircle size={24} />
+              </Button>
+          </SheetTrigger>
+          <SheetContent className="flex flex-col motion-preset-slide-left ">
+            <SheetHeader>
+              <SheetTitle>Chat with Admin</SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col h-full">
+              <ScrollArea className="flex-grow">
+                {messages.map((msg) => (
+            <div
+              key={msg.id}
+              // @ts-ignore
+              className={`flex ${msg.senderid === 1 ? 'justify-start' : 'justify-end'} my-2`}
+            >
+                    <div
+                      className={`inline-block px-4 py-2 rounded-lg max-w-xs ${
+                        // @ts-ignore
+                        msg.senderid === 1
+                          ? 'bg-gray-100 text-gray-800 shadow'
+                          : 'bg-blue-500 text-white shadow-md'
+                      }`}
+                    >
+                      {msg.message}
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef}></div>
+              </ScrollArea>
+              <div className="flex gap-2 mt-4 mb-10">
+                <Input
+                  type="text"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder="Type your message..."
+                />
+                <Button onClick={handleSendMessage}>
+                  Send
+                </Button>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        <Toaster  position="top-center" richColors />
+      </div>
+    </ViewTransitions>
   )
 }
 

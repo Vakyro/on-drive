@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { Link } from 'next-view-transitions'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Truck, AlertTriangle, Wrench, Droplets, Signature } from 'lucide-react'
 import { supabase } from '@/lib/supabase'

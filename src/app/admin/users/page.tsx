@@ -60,9 +60,7 @@ export default function UsersPage() {
           <Button onClick={() => setShowAddForm(!showAddForm)} className="w-full sm:w-auto">
             {showAddForm ? 'Close Add User Form' : 'Add New User'}
           </Button>
-
           {showAddForm && <AddUserForm onUserAdded={handleUserAdded} />}
-
           <div className="overflow-x-auto">
             <Table className="hidden md:table">
               <TableHeader>
