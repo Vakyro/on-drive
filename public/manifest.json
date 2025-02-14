@@ -26,5 +26,21 @@
       "sizes": "256x256",
       "type": "image/png"
     }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "id": "onDrive",
+  "lang": "en",
+  "display_override": [
+    "window-controls-overlay",
+    "fullscreen"
+  ],
+  "dir": "auto",
+  "orientation": "any",
+  "categories": [
+    "business",
+    "productivity",
+    "travel",
+    "utilities"
   ]
 }

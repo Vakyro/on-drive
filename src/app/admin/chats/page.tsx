@@ -92,7 +92,7 @@ export default function AdminChatsPage() {
       return
     }
 
-    const senderid = '1' // Aquí lo dejas fijo o lo cambias a un valor dinámico
+    const senderid = '10' // Aquí lo dejas fijo o lo cambias a un valor dinámico
     const receiverid = selectedUser
 
     const message = {
@@ -142,7 +142,7 @@ export default function AdminChatsPage() {
               <ScrollArea className="h-[calc(100vh-16rem)]">
                 <div className="space-y-2">
                   {messages.map((message) => {
-                    if (message.sender.rol !== 'Admin') {
+                    if (message.sender.rol !== 'admin') {
                       const isSelected = selectedButton === message.senderid
 
                       if (ArrayNames.includes(message.sender.firstname)) {
@@ -182,7 +182,7 @@ export default function AdminChatsPage() {
                   <ScrollArea className="h-[calc(100vh-24rem)] mb-4">
                     <div className="space-y-4">
                       {filteredMessages.map((message) => {
-                        const isSenderAdmin = message.sender.rol === 'Admin'
+                        const isSenderAdmin = message.sender.rol === 'admin'
                         return (
                           <div key={message.id} className={`flex ${isSenderAdmin ? 'justify-end' : 'justify-start'}`} >
                             <div className={`max-w-[75%] p-2 rounded-lg ${isSenderAdmin ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} >

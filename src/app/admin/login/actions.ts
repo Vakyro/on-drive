@@ -39,7 +39,7 @@ export async function Adminlogin(formData: FormData) {
     .eq('email', userEmail)
     .single();
 
-  if (roleError || !userDetails || userDetails.rol !== 'Admin') {
+  if (roleError || !userDetails || userDetails.rol !== 'admin') {
     return { error: 'Acceso denegado: Solo los administradores pueden acceder.' };
   }
 

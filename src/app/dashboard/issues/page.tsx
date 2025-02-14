@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { supabase } from '@/lib/supabase'
 import { createClient } from "../../../../utils/supabase/client"
-import { toast } from 'sonner';
+import { toast } from 'sonner'
 
 export default function IssuesForm() {
   const router = useRouter()
@@ -26,6 +27,8 @@ export default function IssuesForm() {
     truckplate: '',
   })
 
+  // Estado para la foto de evidencia
+  const [fileEvidence, setFileEvidence] = useState<File | null>(null)
   const [user, setUser] = useState(null)
   const [users, setUsers] = useState(null)
 
@@ -39,7 +42,8 @@ export default function IssuesForm() {
     const { data, error } = await supabase.auth.getUser()
     if (error || !data?.user) {
       console.log('no user')
-    } else {//@ts-ignore
+    } else {
+      //@ts-ignore
       setUser(data.user)
     }
   }
@@ -49,7 +53,8 @@ export default function IssuesForm() {
     const { data: users, error: usersError } = await supabase.from("users").select()
     if (usersError) {
       console.log('error fetching users', usersError)
-    } else {//@ts-ignore
+    } else {
+      //@ts-ignore
       setUsers(users)
     }
   }
@@ -59,14 +64,46 @@ export default function IssuesForm() {
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
+  // Manejo del input de archivo
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFileEvidence(e.target.files[0])
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()//@ts-ignore
+    e.preventDefault()
+    //@ts-ignore
     const userId = users?.find(u => u.email === user?.email)?.id
     if (!userId) {
       console.error('User ID not found')
       return
     }
 
+    // Si se seleccionó un archivo, se sube al bucket
+    let fileUrl = null
+    if (fileEvidence) {
+      const fileExt = fileEvidence.name.split('.').pop()
+      const fileName = `${Date.now()}.${fileExt}`
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('RepairFotoEvidence')
+        .upload(fileName, fileEvidence)
+
+      if (uploadError) {
+        console.error('Error uploading file:', uploadError)
+        toast.error('Error uploading file')
+        return
+      }
+
+      // Se obtiene la URL pública del archivo
+      const { data: publicUrlData } = supabase.storage
+        .from('RepairFotoEvidence')
+        .getPublicUrl(fileName)
+      fileUrl = publicUrlData.publicUrl
+    }
+
+    // Se inserta el registro en la tabla incluyendo la URL de la foto
     const { data, error } = await supabase
       .from('repairreport')
       .insert({
@@ -80,14 +117,16 @@ export default function IssuesForm() {
         repairdate: formData.repairdate,
         repairdescription: formData.repairdescription,
         truckplate: formData.truckplate,
+        repairEvidence: fileUrl,
         userid: userId
       })
 
     if (error) {
       console.error('Error submitting issue:', error)
+      toast.error('Error submitting report')
     } else {
       console.log('Issue submitted successfully:', data)
-      toast.success('Issue submitted successfully!');
+      toast.success('Issue submitted successfully!')
       router.push('/dashboard')
     }
   }
@@ -172,7 +211,22 @@ export default function IssuesForm() {
             onChange={handleChange}
             required
           />
-          <Button type="submit" >Submit Issue Report</Button>
+
+          {/* Label pegada al input para el archivo */}
+          <div className="flex flex-col">
+            <Label htmlFor="RepairEvidence" className="mb-1">
+              Foto Evidence
+            </Label>
+            <Input
+              type="file"
+              name="RepairEvidence"
+              id="RepairEvidence"
+              onChange={handleFileChange}
+              required
+            />
+          </div>
+
+          <Button type="submit">Submit Issue Report</Button>
         </form>
       </CardContent>
     </Card>

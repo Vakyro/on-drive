@@ -109,7 +109,7 @@ function DashboardLayoutContent({
 
     const newMessage = {
       senderid: currentUser.id,
-      receiverid: '1', // ID del administrador
+      receiverid: '10', // ID del administrador
       message: inputMessage,
       createdat: new Date().toISOString(),
     }
@@ -202,7 +202,7 @@ function DashboardLayoutContent({
                     <div
                       className={`inline-block px-4 py-2 rounded-lg max-w-xs ${
                         // @ts-ignore
-                        msg.senderid === 1
+                        msg.senderid === 10
                           ? 'bg-gray-100 text-gray-800 shadow'
                           : 'bg-blue-500 text-white shadow-md'
                       }`}

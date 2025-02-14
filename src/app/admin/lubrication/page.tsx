@@ -32,6 +32,7 @@ interface LubricationInspection {
   clevelservice: boolean;
   truckplate: string;
   userid: number;
+  driverName?: string;
 }
 
 export default function LubricationInspectionsPage() {
@@ -42,9 +43,25 @@ export default function LubricationInspectionsPage() {
   }, []);
 
   const fetchInspections = async () => {
-    const { data, error } = await supabase.from('lubricationinspection').select('*');
-    if (data) setInspections(data);
-    if (error) console.error('Error fetching lubrication inspections:', error);
+    const { data: inspectionsData, error: inspectionsError } = await supabase.from('lubricationinspection').select('*');
+    const { data: usersData, error: usersError } = await supabase.from('users').select('id, firstname, lastname');
+
+    if (inspectionsError) console.error('Error fetching lubrication inspections:', inspectionsError);
+    if (usersError) console.error('Error fetching users:', usersError);
+
+    if (inspectionsData && usersData) {
+      const usersMap = usersData.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {} as Record<number, { firstname: string; lastname: string }>);
+
+      const inspectionsWithUsers = inspectionsData.map(inspection => ({
+        ...inspection,
+        driverName: usersMap[inspection.userid] ? `${usersMap[inspection.userid].firstname} ${usersMap[inspection.userid].lastname}` : 'Unassigned',
+      }));
+
+      setInspections(inspectionsWithUsers);
+    }
   };
 
   const deleteInspection = async (id: number) => {
@@ -80,6 +97,7 @@ export default function LubricationInspectionsPage() {
                 <TableHead>License</TableHead>
                 <TableHead>Mileage/Hours</TableHead>
                 <TableHead>Inspection Date</TableHead>
+                <TableHead>Driver Name</TableHead>
                 <TableHead>Performed By</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -96,6 +114,7 @@ export default function LubricationInspectionsPage() {
                   <TableCell>{inspection.license}</TableCell>
                   <TableCell>{inspection.mileageorhours}</TableCell>
                   <TableCell>{inspection.inspectiondate}</TableCell>
+                  <TableCell>{inspection.driverName}</TableCell>
                   <TableCell>{inspection.performedby}</TableCell>
                   <TableCell>
                     <Button variant="destructive" size="sm" onClick={() => deleteInspection(inspection.id)}>
@@ -122,6 +141,7 @@ export default function LubricationInspectionsPage() {
               <p><strong>Mileage/Hours:</strong> {inspection.mileageorhours}</p>
               <p><strong>Inspection Date:</strong> {inspection.inspectiondate}</p>
               <p><strong>Performed By:</strong> {inspection.performedby}</p>
+              <p><strong>Driver Name:</strong> {inspection.driverName}</p>
               <div className="flex space-x-2">
                 <Button variant="destructive" size="sm" onClick={() => deleteInspection(inspection.id)}>
                   Delete

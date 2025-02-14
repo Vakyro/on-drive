@@ -18,6 +18,7 @@ interface VehicleInspection {
   driversignature: string;
   mechanicsignature: string;
   userid: number;
+  driverName?: string;  // Añadimos el nombre del conductor
 }
 
 export default function VehicleInspectionsPage() {
@@ -28,9 +29,27 @@ export default function VehicleInspectionsPage() {
   }, []);
 
   const fetchInspections = async () => {
-    const { data, error } = await supabase.from('vehicleinspection').select('*');
-    if (data) setInspections(data);
-    if (error) console.error('Error fetching vehicle inspections:', error);
+    const { data: inspectionsData, error: inspectionsError } = await supabase.from('vehicleinspection').select('*');
+    const { data: usersData, error: usersError } = await supabase.from('users').select('id, firstname, lastname');
+
+    if (inspectionsError) console.error('Error fetching vehicle inspections:', inspectionsError);
+    if (usersError) console.error('Error fetching users:', usersError);
+
+    if (inspectionsData && usersData) {
+      const usersMap = usersData.reduce((acc, user) => {
+        acc[user.id] = user;
+        return acc;
+      }, {} as Record<number, { firstname: string; lastname: string }>);
+
+      const inspectionsWithDriverNames = inspectionsData.map(inspection => ({
+        ...inspection,
+        driverName: usersMap[inspection.userid]
+          ? `${usersMap[inspection.userid].firstname} ${usersMap[inspection.userid].lastname}`
+          : 'Unassigned',
+      }));
+
+      setInspections(inspectionsWithDriverNames);
+    }
   };
 
   const deleteInspection = async (id: number) => {
@@ -65,6 +84,7 @@ export default function VehicleInspectionsPage() {
                 <TableHead>Truck Plate</TableHead>
                 <TableHead>Odometer Reading</TableHead>
                 <TableHead>Remarks</TableHead>
+                <TableHead>Driver Name</TableHead>
                 <TableHead>Driver's Signature</TableHead>
                 <TableHead>Mechanic's Signature</TableHead>
                 <TableHead>Actions</TableHead>
@@ -81,6 +101,7 @@ export default function VehicleInspectionsPage() {
                   <TableCell>{inspection.truckplate}</TableCell>
                   <TableCell>{inspection.odometerreading}</TableCell>
                   <TableCell>{inspection.remarks}</TableCell>
+                  <TableCell>{inspection.driverName}</TableCell>
                   <TableCell>{inspection.driversignature}</TableCell>
                   <TableCell>{inspection.mechanicsignature}</TableCell>
                   <TableCell>
@@ -106,6 +127,7 @@ export default function VehicleInspectionsPage() {
               <p><strong>Truck Plate:</strong> {inspection.truckplate}</p>
               <p><strong>Odometer Reading:</strong> {inspection.odometerreading}</p>
               <p><strong>Remarks:</strong> {inspection.remarks}</p>
+              <p><strong>Driver Name:</strong> {inspection.driverName}</p>
               <p><strong>Driver's Signature:</strong> {inspection.driversignature}</p>
               <p><strong>Mechanic's Signature:</strong> {inspection.mechanicsignature}</p>
               <div className="flex space-x-2">
